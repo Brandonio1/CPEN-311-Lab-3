@@ -12,7 +12,8 @@ module FLASH_Rd_Ctrl (
     flash_mem_readdatavalid,
 
     audio_data,
-    get_new_address
+    get_new_address,
+    picoblaze_audio_sample
 );
 
     input sampling_clk;
@@ -26,6 +27,7 @@ module FLASH_Rd_Ctrl (
 
     output logic [7:0] audio_data;
     output logic get_new_address = 0;
+    output logic [7:0] picoblaze_audio_sample;
 
     // Boolean variable, used for reading upper/lower byte of FLASH audio data during the next clock cycle
     logic read_lower_audio_byte_next = 1;
@@ -41,6 +43,8 @@ module FLASH_Rd_Ctrl (
             // lower 16 bits of the flash_mem_readdata
             if (flash_mem_address < 23'h40000)
             begin
+                picoblaze_audio_sample <= flash_mem_readdata[15:8];
+
                 // Reading lower byte of the lower 16 bits of the read data
                 if (read_lower_audio_byte_next)
                     audio_data <= flash_mem_readdata[7:0];
@@ -52,6 +56,8 @@ module FLASH_Rd_Ctrl (
             // upper 16 bits of the flash_mem_readdata
             else 
             begin
+                picoblaze_audio_sample <= flash_mem_readdata[31:24];
+                
                 // Reading lower byte of the upper 16 bits of read data
                 if (read_lower_audio_byte_next)
                     audio_data <= flash_mem_readdata[23:16];

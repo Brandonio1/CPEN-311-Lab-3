@@ -125,9 +125,9 @@ output                      DRAM_WE_N;
 //=======================================================
 // Input and output declarations
 logic CLK_50M;
-logic  [7:0] LED;
+//logic  [7:0] LED;
 assign CLK_50M =  CLOCK_50;
-assign LEDR[7:0] = LED[7:0];
+//assign LEDR[7:0] = LED[7:0];
 
 //Character definitions
 
@@ -264,12 +264,13 @@ FLASH_Rd_Ctrl FLASH_Audio_Data_Ctrl (
     .flash_mem_readdatavalid(flash_mem_readdatavalid),
 
     .audio_data(audio_data),
-    .get_new_address(flash_mem_read)
+    .get_new_address(flash_mem_read),
+    .picoblaze_audio_sample(picoblaze_audio_sample)
 );
 
 KBD_Interface Keyboard_Interface (  
-    .clk(Synched_Clock_22KHz),
-    .KBD_en(kbd_data_ready),
+    .clk(CLK_50M),
+    .KBD_en(Synched_Clock_22KHz),
     .KBD_key(kbd_received_ascii_code),
     .play_music(play_music),
     .play_forwards(play_forwards),
@@ -285,7 +286,32 @@ begin
     endcase
 end
 
+//=======================================================================================================================
 //
+// Picoblaze
+//
+//
+
+wire [23:0] sseg;
+wire [7:0] picoblaze_audio_sample;
+    
+picoblaze_template
+#(
+.clk_freq_in_hz(25000000)
+) 
+picoblaze_template_inst(
+                        .blinking_led(LEDR[0]),
+                        .led(LEDR[9:2]),
+                        .clk(CLK_50M),
+                        .input_data(picoblaze_audio_sample),
+                        .variable_clk_freq_hz(Clock_22KHz_num_clk_divisions),
+                        .Synched_Clock_22KHz(Synched_Clock_22KHz),
+								.sseg(sseg)
+                 );
+
+
+
+//=======================================================================================================================
 
 wire            flash_mem_read;
 wire            flash_mem_waitrequest;
@@ -626,6 +652,8 @@ SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst2(.ssOut(Seven_Seg_Val
 SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst3(.ssOut(Seven_Seg_Val[3]), .nIn(Seven_Seg_Data[3]));
 SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst4(.ssOut(Seven_Seg_Val[4]), .nIn(Seven_Seg_Data[4]));
 SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst5(.ssOut(Seven_Seg_Val[5]), .nIn(Seven_Seg_Data[5]));
+
+
 
 assign HEX0 = Seven_Seg_Val[0];
 assign HEX1 = Seven_Seg_Val[1];

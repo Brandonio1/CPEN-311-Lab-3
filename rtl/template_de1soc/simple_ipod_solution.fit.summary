@@ -1,16 +1,16 @@
-Fitter Status : Successful - Thu Jun 05 14:41:13 2025
+Fitter Status : Successful - Thu Jun 12 00:12:41 2025
 Quartus Prime Version : 16.1.2 Build 203 01/18/2017 SJ Lite Edition
 Revision Name : simple_ipod_solution
 Top-level Entity Name : simple_ipod_solution
 Family : Cyclone V
 Device : 5CSEMA5F31C6
 Timing Models : Final
-Logic utilization (in ALMs) : 3,915 / 32,070 ( 12 % )
-Total registers : 8342
+Logic utilization (in ALMs) : 5,122 / 32,070 ( 16 % )
+Total registers : 9709
 Total pins : 189 / 457 ( 41 % )
 Total virtual pins : 0
-Total block memory bits : 78,976 / 4,065,280 ( 2 % )
-Total RAM Blocks : 15 / 397 ( 4 % )
+Total block memory bits : 82,176 / 4,065,280 ( 2 % )
+Total RAM Blocks : 16 / 397 ( 4 % )
 Total DSP Blocks : 0 / 87 ( 0 % )
 Total HSSI RX PCSs : 0
 Total HSSI PMA RX Deserializers : 0
